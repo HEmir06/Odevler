@@ -1,0 +1,361 @@
+{
+  "name": "QUİZ",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Bilgisayar Mühendisliği Konu Analiz Quizi",
+        "formDescription": "Verdiğiniz cevaplara göre AI tarafından eksikliklerinizi gidermeye yarayan analizler yapılacaktır.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "AD SOYAD"
+            },
+            {
+              "fieldLabel": "Email Adresiniz",
+              "fieldType": "email"
+            },
+            {
+              "fieldLabel": "Programlamada bir veriyi hafızada saklamak için kullanılan isimlendirilmiş alanlara ne ad verilir?",
+              "fieldType": "radio",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Değişken"
+                  },
+                  {
+                    "option": "Döngü"
+                  },
+                  {
+                    "option": "Fonksiyon"
+                  },
+                  {
+                    "option": "Dizi"
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": " Sadece 'Doğru' (True) veya 'Yanlış' (False) değerlerini alabilen veri tipi hangisidir?",
+              "fieldType": "radio",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "İnt"
+                  },
+                  {
+                    "option": "Bool"
+                  },
+                  {
+                    "option": "String"
+                  },
+                  {
+                    "option": "Char"
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Aşağıdakilerden hangisi bir 'İşletim Sistemi' değildir?",
+              "fieldType": "radio",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "MacOS"
+                  },
+                  {
+                    "option": "Pardus"
+                  },
+                  {
+                    "option": "Windows"
+                  },
+                  {
+                    "option": "Chrome"
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": " Aşağıdaki dosya uzantılarından hangisi bir resim dosyasına aittir?",
+              "fieldType": "radio",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": ".mp3"
+                  },
+                  {
+                    "option": ".jpg"
+                  },
+                  {
+                    "option": ".exe"
+                  },
+                  {
+                    "option": ".bat"
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Verilerin tablolar halinde saklandığı ve yönetildiği sistemlere genel olarak ne ad verilir?",
+              "fieldType": "radio",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Veritabanı"
+                  },
+                  {
+                    "option": "İşletim Sistemi"
+                  },
+                  {
+                    "option": "Sunucu"
+                  },
+                  {
+                    "option": "Ağ"
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Bir kod bloğunun belirli bir şart sağlandığı sürece tekrar tekrar çalışmasını sağlayan yapı hangisidir?",
+              "fieldType": "radio",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Döngü"
+                  },
+                  {
+                    "option": "Dizi"
+                  },
+                  {
+                    "option": "Değişken"
+                  },
+                  {
+                    "option": "Pointer"
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "CPU’nun görevi nedir?",
+              "fieldType": "radio",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Veri Depolamak"
+                  },
+                  {
+                    "option": "Görüntü İşlemek"
+                  },
+                  {
+                    "option": "Komutları İşlemek"
+                  },
+                  {
+                    "option": "İnternete Bağlanmak"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        0,
+        0
+      ],
+      "id": "60cfa0a0-115e-4004-9287-d4cbbb6ca014",
+      "name": "On form submission",
+      "webhookId": "e11142e2-4d8f-436b-87c7-31b3df6e162d"
+    },
+    {
+      "parameters": {
+        "jsCode": "const results = $json; \nlet eksikKonular = [];\nlet dogruSayisi = 0;\n\n\nfunction kontrol(baslikAnahtar, beklenenCevap) {\n    for (let key in results) {\n        if (key.toLowerCase().includes(baslikAnahtar.toLowerCase())) {\n            let cevap = String(results[key]).toLowerCase().trim();\n            if (cevap.includes(beklenenCevap.toLowerCase().trim())) {\n                return true;\n            }\n        }\n    }\n    return false;\n}\n\n// 1. Soru (Değişken)\nif (kontrol(\"hafızada saklamak\", \"Değişken\")) dogruSayisi++; \nelse eksikKonular.push(\"Temel Programlama (Değişkenler)\");\n\n// 2. Soru (Bool)\nif (kontrol(\"Sadece 'Doğru'\", \"Bool\")) dogruSayisi++; \nelse eksikKonular.push(\"Veri Tipleri (Boolean)\");\n\n// 3. Soru (Chrome)\nif (kontrol(\"İşletim Sistemi\", \"Chrome\")) dogruSayisi++; \nelse eksikKonular.push(\"İşletim Sistemleri\");\n\n// 4. Soru (.jpg)\nif (kontrol(\"resim dosyasına\", \".jpg\")) dogruSayisi++; \nelse eksikKonular.push(\"Dosya Uzantıları\");\n\n// 5. Soru (Veritabanı)\nif (kontrol(\"tablolar halinde\", \"Veritabanı\")) dogruSayisi++; \nelse eksikKonular.push(\"Veritabanı Mantığı\");\n\n// 6. Soru (Döngü)\nif (kontrol(\"tekrar tekrar\", \"Döngü\")) dogruSayisi++; \nelse eksikKonular.push(\"Döngüler\");\n\n// 7. Soru (CPU)\nif (kontrol(\"CPU\", \"Komutları İşlemek\")) dogruSayisi++; \nelse eksikKonular.push(\"Bilgisayar Mimarisi (CPU)\");\n\nreturn {\n    adSoyad: results[\"AD SOYAD\"] || \"Emir Gölemen\",\n    email: results[\"Email Adresiniz\"] || \"emir@test.com\",\n    toplamDogru: dogruSayisi,\n    eksiklikler: eksikKonular.length > 0 ? eksikKonular.join(\", \") : \"Eksik yok!\",\n    analiz: `${dogruSayisi}/7 başarı oranı.`\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "f5bfa94c-ae9f-4c35-ba45-42a1226f19ad",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Merhaba, ben bir Bilgisayar Mühendisliği öğrencisiyim ve bir quiz otomasyonu yapıyorum. \nAşağıdaki öğrenci bilgilerine göre profesyonel bir analiz hazırlar mısın?\n\nÖğrenci: {{ $json.adSoyad }}\nSkor: {{ $json.analiz }}\nEksik Konular: {{ $json.eksiklikler }}\n\nLütfen öğrenciye ismiyle hitap et, eksiklerini nasıl kapatabileceğini teknik terimlerle ama motive edici bir dille açıkla. Cevabın 3-4 cümleyi geçmesin.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "7bd987dd-19b6-4562-ac4b-1fc33ff6a35f",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        288,
+        208
+      ],
+      "id": "4e472edb-6e51-4d19-bd29-822b477153fc",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "vEyLkeC3BVaXMRxn",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "databaseId": {
+          "__rl": true,
+          "value": "350ff6f3-566b-80eb-a124-db54076962a7",
+          "mode": "list",
+          "cachedResultName": "Quiz Sonuçları",
+          "cachedResultUrl": "https://www.notion.so/350ff6f3566b80eba124db54076962a7"
+        },
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "Name|title",
+              "title": "={{ $('Code in JavaScript').item.json.adSoyad }}"
+            },
+            {
+              "key": "Email|email",
+              "emailValue": "={{ $('Code in JavaScript').item.json.email }}"
+            },
+            {
+              "key": "Skor|number",
+              "numberValue": "={{ $('Code in JavaScript').item.json.toplamDogru }}"
+            },
+            {
+              "key": "AI Tavsiyesi|rich_text",
+              "textContent": "={{ $json.output }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        720,
+        32
+      ],
+      "id": "8275e92f-230d-4e37-8b28-cda5c46adbfc",
+      "name": "Create a database page",
+      "credentials": {
+        "notionApi": {
+          "id": "HUDgRNKG7sXUCO5X",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "emirgolemen173@gmail.com",
+        "toEmail": "={{ $json.property_email }}",
+        "subject": "Quiz Sonucun ve AI Tavsiyeleri",
+        "emailFormat": "text",
+        "text": "={{ $json.property_ai_tavsiyesi }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        960,
+        16
+      ],
+      "id": "b3d70575-a49b-456a-81f3-73031737122e",
+      "name": "Send an Email",
+      "webhookId": "912e3b24-7db9-479c-853d-5d9065deba7d",
+      "credentials": {
+        "smtp": {
+          "id": "EwV6Xk3bqtyAHmkd",
+          "name": "SMTP account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Create a database page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a database page": {
+      "main": [
+        [
+          {
+            "node": "Send an Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "161c50c2-a757-4ff0-a6c4-d2c94188e3c6",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b8f07c78b12d4c38dc8a3230d3dab7580057b840cac88e34b06a5c886cf1353b"
+  },
+  "id": "dBHYBamDniLbaUL7",
+  "tags": []
+}
